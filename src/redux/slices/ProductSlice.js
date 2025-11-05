@@ -8,7 +8,7 @@ const productsSlice = createSlice({
   },
   reducers: {
     addProduct: (state, action) => {
-      state.items.unshift({
+      state.items.push({
         id: state.items?.length + 1 || Date.now(),
         createdAt: new Date().toISOString(),
         ...action.payload,

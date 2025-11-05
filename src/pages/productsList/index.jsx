@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 import { Input, Button, Modal, Card, Table, Pagination } from "antd";
-import debounce from "lodash.debounce";
 import {
   PlusOutlined,
   AppstoreOutlined,
@@ -12,23 +12,23 @@ import ProductForm from "../../components/productForm";
 
 const ProductListPage = () => {
   const { items } = useSelector((state) => state.products);
-  const [filtered, setFiltered] = useState(items);
+  const [filteredItems, setFilteredItems] = useState(items);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [view, setView] = useState("grid"); // 'grid' or 'list'
+  const [view, setView] = useState(localStorage.getItem('view') || "grid");
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
   const pageSize = 10;
 
-  // --- Debounced search ---
+  //  Debounced search
   const handleSearch = useMemo(
     () =>
       debounce((value) => {
         const filteredList = items.filter((p) =>
           p.name.toLowerCase().includes(value.toLowerCase())
         );
-        setFiltered(filteredList);
+        setFilteredItems(filteredList);
         setCurrentPage(1);
       }, 500),
     [items]
@@ -39,11 +39,17 @@ const ProductListPage = () => {
     handleSearch(e.target.value);
   };
 
-  // --- Pagination logic ---
-  const startIndex = (currentPage - 1) * pageSize;
-  const paginatedData = filtered.slice(startIndex, startIndex + pageSize);
+  // handling products view
+  const handleViewUpdate = (value) => {
+    setView(value);
+    localStorage.setItem('view', value)
+  }
 
-  // --- Table columns for list view ---
+  // Pagination logic
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedData = filteredItems.slice(startIndex, startIndex + pageSize);
+
+  //  Table columns for list view 
   const columns = [
     { title: "Name", dataIndex: "name" },
     { title: "Category", dataIndex: "category" },
@@ -52,7 +58,7 @@ const ProductListPage = () => {
     {
       title: "Action",
       render: (_, record) => (
-        <Button type="link" onClick={() => navigate(`/product/${record.id}`)}>
+        <Button type="link" onClick={() => navigate(`/product/${record?.id}`)}>
           View
         </Button>
       ),
@@ -73,12 +79,12 @@ const ProductListPage = () => {
           <Button
             icon={<AppstoreOutlined />}
             type={view === "grid" ? "primary" : "default"}
-            onClick={() => setView("grid")}
+            onClick={() => handleViewUpdate('grid')}
           />
           <Button
             icon={<UnorderedListOutlined />}
             type={view === "list" ? "primary" : "default"}
-            onClick={() => setView("list")}
+            onClick={() => handleViewUpdate('list')}
           />
           <Button
             type="primary"
@@ -90,48 +96,50 @@ const ProductListPage = () => {
         </div>
       </div>
 
-      {/* 🧱 Product View Section */}
+      {/* Product View Section */}
       {view === "grid" ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {paginatedData.map((item) => (
+          {paginatedData?.length > 0 && paginatedData.map((item) => (
             <Card
-              key={item.id}
-              title={item.name}
+              key={item?.id}
+              title={item?.name}
               className="shadow-sm cursor-pointer hover:shadow-lg transition"
               onClick={() => navigate(`/product/${item.id}`)}
             >
               <p>
-                <b>Category:</b> {item.category}
+                <b>Category:</b> {item?.category}
               </p>
               <p>
-                <b>Price:</b> ₹{item.price}
+                <b>Price:</b> ₹{item?.price}
               </p>
               <p>
-                <b>Stock:</b> {item.stock}
+                <b>Stock:</b> {item?.stock}
               </p>
             </Card>
           ))}
         </div>
       ) : (
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={paginatedData}
-          pagination={false}
-        />
+        <div className="w-full overflow-x-auto rounded-lg border border-gray-200">
+          <Table
+            columns={columns}
+            dataSource={paginatedData}
+            rowKey="id"
+            pagination={false}
+          />
+        </div>
       )}
 
-      {/* 📄 Pagination */}
+      {/*  Pagination */}
       <div className="flex justify-center mt-4">
         <Pagination
           current={currentPage}
           pageSize={pageSize}
-          total={filtered.length}
+          total={filteredItems.length}
           onChange={(page) => setCurrentPage(page)}
         />
       </div>
 
-      {/* ➕ Add Product Modal */}
+      {/* Add Product Modal */}
       <Modal
         open={isModalOpen}
         title="Add Product"

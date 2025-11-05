@@ -3,9 +3,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { store } from './redux/store/store'
 import './App.css'
 
-// components 
+// Pages 
 import ProductsListPage from './pages/productsList'
 import ProductDetailPage from './pages/productDetails'
+import NotFoundPage from './pages/notFound'
 
 
 
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ProductsListPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
+            <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </BrowserRouter>
