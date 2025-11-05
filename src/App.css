@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.grid {
+    grid-auto-rows: 1fr;
+  }
