@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Modal, Card } from "antd";
@@ -15,12 +15,12 @@ const ProductDetailPage = () => {
 
     return (
         <div className="max-w-xl mx-auto space-y-4">
-            <Card title={product.name} bordered={true}>
-                <p><b>Category:</b> {product.category}</p>
-                <p><b>Price:</b> ₹{product.price}</p>
-                <p><b>Stock:</b> {product.stock}</p>
-                <p><b>Description:</b> {product.description || "No description"}</p>
-                <p><b>Created At:</b> {new Date(product.createdAt).toLocaleString()}</p>
+            <Card title={product?.name} bordered={true}>
+                <p><b>Category:</b> {product?.category}</p>
+                <p><b>Price:</b> ₹{product?.price}</p>
+                <p><b>Stock:</b> {product?.stock}</p>
+                <p><b>Description:</b> {product?.description || "No description"}</p>
+                <p><b>Created At:</b> {new Date(product?.createdAt)?.toLocaleString()}</p>
             </Card>
 
             <div className="flex justify-between">
