@@ -137,7 +137,7 @@ const ProductListPage = () => {
             animate="visible"
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
-            {paginatedData?.length > 0 &&
+            {paginatedData?.length > 0 ?
               paginatedData.map((item) => (
                 <motion.div
                   key={item?.id}
@@ -156,7 +156,9 @@ const ProductListPage = () => {
                     Stock: {item?.stock}
                   </p>
                 </motion.div>
-              ))}
+              )) : (
+                <p>No Items Found</p>
+              )}
           </motion.div>
         ) : (
           <motion.div
