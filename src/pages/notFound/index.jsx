@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { HomeOutlined } from "@ant-design/icons";
@@ -13,7 +13,7 @@ const NotFoundPage = () => {
         Oops! Page not found.
       </h2>
       <p className="text-gray-500 max-w-md">
-        The page you’re looking for doesn’t exist or might have been moved.
+        The page you are looking for doesnot exist or might have been removed.
       </p>
       <Button
         type="primary"
@@ -27,4 +27,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default memo(NotFoundPage);

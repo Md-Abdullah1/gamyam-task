@@ -15,7 +15,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-50 p-4">
+        <div className="min-h-screen p-4 bg-linear-to-br from-sky-50 via-blue-50 to-blue-100 text-gray-800">
           <h1 className="text-2xl font-bold text-center mb-6">Product Management</h1>
           <Routes>
             <Route path="/" element={<ProductsListPage />} />
