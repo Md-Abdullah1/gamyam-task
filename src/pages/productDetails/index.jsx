@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Modal, Card } from "antd";
@@ -14,8 +14,10 @@ const ProductDetailPage = () => {
     if (!product) return <p className="text-center mt-10">Product not found</p>;
 
     return (
-        <div className="max-w-xl mx-auto space-y-4">
-            <Card title={product?.name} bordered={true}>
+        <div className="max-w-xl mx-auto space-y-4 flex flex-col gap-2">
+            <Card title={product?.name} bordered={true}
+                className="p-4 sm:p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-md hover:shadow-lg transition-all duration-300"
+            >
                 <p><b>Category:</b> {product?.category}</p>
                 <p><b>Price:</b> ₹{product?.price}</p>
                 <p><b>Stock:</b> {product?.stock}</p>
@@ -42,4 +44,4 @@ const ProductDetailPage = () => {
     );
 };
 
-export default ProductDetailPage;
+export default memo(ProductDetailPage);
